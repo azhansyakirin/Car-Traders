@@ -52,13 +52,13 @@ function App() {
   return (
     <>
       <section id="Title" className="p-[2rem]">
-        <h1 className="text-[#FFC800] text-center font-extrabold text-8xl tracking-tight">CarTraders<span className="text-white">.com</span></h1>
+        <h1 className="text-gold text-center font-extrabold text-lg tablet:text-8xl tracking-tight">CarTraders<span className="text-white">.com</span></h1>
       </section>
-      <section id="SearchCar" className="min-h-[100vh] px-[5rem] py-4">
-        <div className="flex flex-row items-center bg-[#fdfdfd] rounded-lg shadow-lg mb-4">
-          <div className="relative w-[30%]">
+      <section id="SearchCar" className="min-h-[100vh] px-4 tablet:px-[5rem] py-4">
+        <div className="flex flex-col tablet:flex-row items-center bg-[#fdfdfd] rounded-lg shadow-lg mb-4">
+          <div className="relative w-full tablet:w-[30%]">
             <button
-              className="flex justify-center items-center py-4 w-full bg-[#FFC800] hover:bg-[#e7b708] outline-none rounded-l-lg font-[10pt]"
+              className="flex justify-center items-center py-4 w-full bg-[#FFC800] hover:bg-[#e7b708] outline-none rounded-lg tablet:!rounded-l-lg font-[10pt]"
               onClick={() => { setIsShowDropdownCategory(!isShowDropdownCategory) }}
             >
               <span className="text-black inline-flex">
@@ -83,7 +83,7 @@ function App() {
             <input
               id="SearchBox"
               type="search"
-              className="px-8 py-4 outline-none text-black text-left w-[100%] rounded-r-lg"
+              className="px-8 py-4 outline-none text-black text-center tablet:text-left w-[100%] rounded-lg tablet:rounded-r-lg"
               value={searchValue}
               onChange={e => searchCar(e)}
               placeholder="What car you are looking for?"
@@ -91,7 +91,7 @@ function App() {
           </div>
         </div>
         <div className="min-w-screen min-h-screen bg-white rounded-lg shadow-lg">
-          <div className="flex flex-wrap justify-center py-8 gap-4">
+          <div className="flex flex-wrap justify-center py-8 px-4 tablet:px-0 gap-4">
             {carResult.map((vehicle, index) => (
               <Cards key={index} img={vehicle.img} >
                 {vehicle.recommended && <div className="absolute top-0 left-0 z-10 bg-red-500 rounded-br-lg px-2 py-1">RECOMMENDED</div>}
