@@ -12,7 +12,7 @@ function App() {
   const [arrCarSelectedCategory, setArrCarSelectedCategory] = useState([]);
   const [isShowDropdownCategory, setIsShowDropdownCategory] = useState(false);
 
-  const category = ['All Category', 'SUV', 'Sedan', 'Compact', 'MPV'];
+  const category = ['All Category', 'SUV', 'Sport', 'Sedan', 'Compact', 'MPV'];
 
   console.log({ searchValue, filterSearch, carCategory, arrCarSelectedCategory })
 
@@ -33,23 +33,28 @@ function App() {
 
   /* handling user input */
   const searchCar = (e) => {
-    const inputValue = e.target.value;
+    const inputValue = e.target.value.toLowerCase();
     setSearchValue(inputValue);
 
-    let filteredCars = arrCarSelectedCategory.filter(option =>
-      option.category.toLowerCase().includes(carCategory.toLowerCase()) &&
-      option.name.toLowerCase().includes(inputValue.toLowerCase())
+    let filteredCars = car.filter(option =>
+      (!carCategory || option.category.toLowerCase() === carCategory.toLowerCase()) &&
+      option.name.toLowerCase().includes(inputValue)
     );
 
     setFilterSearch(filteredCars.length > 0 ? filteredCars : []);
   };
 
+
+  /* final car array */
+  let carResult = ((filterSearch.length > 0 ? filterSearch : arrCarSelectedCategory.length > 0 ? arrCarSelectedCategory : car)
+    .filter(vehicle => !carCategory || vehicle.category.toLowerCase() === carCategory.toLowerCase())) || [];
+
   return (
     <>
-      <section id="Hero" className="p-[2rem]">
-        <h1 className="text-center font-extrabold text-8xl tracking-tight">CarTraders.com</h1>
+      <section id="Title" className="p-[2rem]">
+        <h1 className="text-[#FFC800] text-center font-extrabold text-8xl tracking-tight">CarTraders<span className="text-white">.com</span></h1>
       </section>
-      <section id="SearchCar" className="min-h-[100vh] p-[5rem]">
+      <section id="SearchCar" className="min-h-[100vh] px-[5rem] py-4">
         <div className="flex flex-row items-center bg-[#fdfdfd] rounded-lg shadow-lg mb-4">
           <div className="relative w-[30%]">
             <button
@@ -65,7 +70,7 @@ function App() {
             </button>
             {
               isShowDropdownCategory &&
-              <div className="absolute z-10 w-[100%] outline-none">
+              <div className="absolute z-50 w-[100%] outline-none">
                 <Popover
                   onSelectCategory={handleDropdownClickData}
                   closePopover={handleClosePopover}
@@ -81,36 +86,29 @@ function App() {
               className="px-8 py-4 outline-none text-black text-left w-[100%] rounded-r-lg"
               value={searchValue}
               onChange={e => searchCar(e)}
-              placeholder="Search your desired car"
+              placeholder="What car you are looking for?"
             />
           </div>
         </div>
         <div className="min-w-screen min-h-screen bg-white rounded-lg shadow-lg">
           <div className="flex flex-wrap justify-center py-8 gap-4">
-            {
-              (filterSearch.length > 0 ?
-                filterSearch :
-                arrCarSelectedCategory.length > 0 ?
-                  arrCarSelectedCategory :
-                  car)
-                .filter(vehicle => !carCategory || vehicle.category.toLowerCase() === carCategory.toLowerCase())
-                .map((vehicle, index) => (
-                  <Cards key={index} img={vehicle.img} >
-                    <p className="text-2xl font-normal tracking-tighter text-white text-shadow-lg">
-                      {vehicle.name}
-                    </p>
-                    <p className="text-md text-white tracking-tight text-shadow-md ">
-                      {vehicle.engineCapacity} litre
-                    </p>
-                    <p className="text-md text-white tracking-tight text-shadow-md ">
-                      {vehicle.category}
-                    </p>
-                    <p className="text-2xl font-normal tracking-tighter text-white text-shadow-lg">
-                      RM {(vehicle.price).toLocaleString('en-US')}
-                    </p>
-                  </Cards>
-                ))
-            }
+            {carResult.map((vehicle, index) => (
+              <Cards key={index} img={vehicle.img} >
+                {vehicle.recommended && <div className="absolute top-0 left-0 z-10 bg-red-500 rounded-br-lg px-2 py-1">RECOMMENDED</div>}
+                <p className="text-2xl font-normal tracking-tighter text-white text-shadow-lg">
+                  {vehicle.name}
+                </p>
+                <p className="text-md text-white tracking-tight text-shadow-md ">
+                  {vehicle.engineCapacity} litre
+                </p>
+                <p className="text-md text-white tracking-tight text-shadow-md ">
+                  {vehicle.category}
+                </p>
+                <p className="text-2xl font-normal tracking-tighter text-white text-shadow-lg">
+                  RM {(vehicle.price).toLocaleString('en-US')}
+                </p>
+              </Cards>
+            ))}
           </div>
         </div>
       </section>
